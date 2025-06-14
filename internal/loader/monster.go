@@ -1,4 +1,4 @@
-package importer
+package loader
 
 type Speed struct {
 	Walk string
