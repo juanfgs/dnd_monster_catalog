@@ -2,6 +2,7 @@ package loader
 
 import (
 	"encoding/json" 
+	"github.com/juanfgs/dnd-monster-library/internal/monster"
 	"bytes" 
 	"os" 
 	"io" 
@@ -11,7 +12,7 @@ import (
 /*
  * Parses the monster file and loads all entities
  */
-func LoadMonsters() []Monster {
+func LoadMonsters() []monster.Monster {
 	file, err := os.ReadFile("./data/5e-SRD-Monsters.json")
 
 	if err != nil {
@@ -20,7 +21,7 @@ func LoadMonsters() []Monster {
 
 	dec := json.NewDecoder(bytes.NewReader(file))
 
-	var monsters []Monster 
+	var monsters []monster.Monster 
 	for {
 		if err := dec.Decode(&monsters); err == io.EOF {
 			break
@@ -29,8 +30,8 @@ func LoadMonsters() []Monster {
 		}
 		
 	}
+	for i  := range(monsters) {
+		monsters[i].LoadStats()
+	}
 	return monsters
 }
-
-
-
