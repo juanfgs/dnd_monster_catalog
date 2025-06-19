@@ -5,6 +5,7 @@ import (
 	"github.com/juanfgs/dnd-monster-library/internal/db"
 	"github.com/juanfgs/dnd-monster-library/internal/monster"
 	"github.com/juanfgs/dnd-monster-library/internal/stats"
+	"github.com/juanfgs/dnd-monster-library/internal/proficiency"
 	"github.com/juanfgs/dnd-monster-library/internal/loader"
 	"context"
 	"log"
@@ -21,18 +22,29 @@ func main() {
 	}
 	
 	monsterRepo := monster.NewRepository(pool)
-
 	statsRepo := stats.NewRepository(pool)
+	proficiencyRepo := proficiency.NewRepository(pool)
 	ctx := context.Background()
-	for _, m := range(monsters) {
-		log.Println(m)
-		err := monsterRepo.Create(ctx, &m)
+	for _, mDTO := range(monsters) {
+		m := mDTO.BuildModel()
+		err := monsterRepo.Create(ctx, m)
 		if err != nil {
 			log.Fatal(err)
 		}
 		err = statsRepo.Create(ctx, m.Stats, m.ID)
 		if err != nil {
 			log.Fatal(err)
+		}
+		
+		for _, p := range(m.Proficiencies) {
+			log.Println(p)
+			err = proficiencyRepo.Create(ctx, p)
+			
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
 		}
 	}
 

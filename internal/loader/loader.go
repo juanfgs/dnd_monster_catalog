@@ -12,7 +12,7 @@ import (
 /*
  * Parses the monster file and loads all entities
  */
-func LoadMonsters() []monster.Monster {
+func LoadMonsters() []monster.MonsterDTO {
 	file, err := os.ReadFile("./data/5e-SRD-Monsters.json")
 
 	if err != nil {
@@ -21,7 +21,7 @@ func LoadMonsters() []monster.Monster {
 
 	dec := json.NewDecoder(bytes.NewReader(file))
 
-	var monsters []monster.Monster 
+	var monsters []monster.MonsterDTO
 	for {
 		if err := dec.Decode(&monsters); err == io.EOF {
 			break
@@ -30,8 +30,6 @@ func LoadMonsters() []monster.Monster {
 		}
 		
 	}
-	for i  := range(monsters) {
-		monsters[i].LoadStats()
-	}
+	
 	return monsters
 }

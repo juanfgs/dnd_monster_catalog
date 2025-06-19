@@ -1,6 +1,7 @@
 package monster
 import(
 	"github.com/juanfgs/dnd-monster-library/internal/stats"
+	"github.com/juanfgs/dnd-monster-library/internal/proficiency"
 )
 
 type Speed struct {
@@ -15,11 +16,6 @@ type ArmorClass struct {
 	Value int64
 }
 
-type Proficiency struct {
-	Value int64 
-	Name string
-}
-
 type Monster struct {
 	ID string
 	Index string
@@ -31,27 +27,8 @@ type Monster struct {
 	HitPointsRoll string
 	Languages string
 	ProficiencyBonus int64
+	Proficiencies []*proficiency.Proficiency
 	Stats *stats.Stats
 	XP int64
-
-	// virtual attributes
-	strength int64 
-	dexterity int64 
-	constitution int64
-	intelligence int64
-	wisdom int64
-	charisma int64
-
 }
 
-
-func (m *Monster) LoadStats() {
-	m.Stats = &stats.Stats{
-		Strength: m.strength,
-		Dexterity: m.dexterity,
-		Constitution: m.constitution,
-		Intelligence: m.intelligence,
-		Wisdom: m.wisdom,
-		Charisma: m.charisma,
-	}
-}

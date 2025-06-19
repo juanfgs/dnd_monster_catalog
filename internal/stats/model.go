@@ -8,5 +8,5 @@ type Stats struct {
 	Intelligence int64
 	Wisdom int64
 	Charisma int64
-	MonsterId string
+	MonsterID string
 }
