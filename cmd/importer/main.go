@@ -35,16 +35,20 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		
-		for _, p := range(m.Proficiencies) {
-			log.Println(p)
+	        log.Println(mDTO.Proficiencies)
+		for _, pDTO := range(mDTO.Proficiencies) {
+			p := pDTO.BuildModel()
 			err = proficiencyRepo.Create(ctx, p)
-			
-
+			if err != nil {
+				log.Fatal(err)
+			}
+		        err = proficiencyRepo.Associate(ctx, p.ID, m.ID, pDTO.Value)	
 			if err != nil {
 				log.Fatal(err)
 			}
 
+			log.Println(p)
+			
 		}
 	}
 

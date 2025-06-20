@@ -27,7 +27,7 @@ type Monster struct {
 	HitPointsRoll string
 	Languages string
 	ProficiencyBonus int64
-	Proficiencies []*proficiency.Proficiency
+	Proficiencies []proficiency.Proficiency
 	Stats *stats.Stats
 	XP int64
 }
