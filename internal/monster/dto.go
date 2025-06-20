@@ -24,12 +24,12 @@ type MonsterDTO struct {
 	ArmorClass []armor.ArmorClassDTO `json:"armor_class"`
 	XP int64
 	// virtual attributes
-	strength int64 
-	dexterity int64 
-	constitution int64
-	intelligence int64
-	wisdom int64
-	charisma int64
+	Strength int64 
+	Dexterity int64 
+	Constitution int64
+	Intelligence int64
+	Wisdom int64
+	Charisma int64
 }
 
 func (d MonsterDTO) BuildModel() *Monster{
@@ -50,12 +50,12 @@ func (d MonsterDTO) BuildModel() *Monster{
 		ProficiencyBonus: d.ProficiencyBonus, 
 		Proficiencies: proficiencies,
 		Stats: &stats.Stats{
-			Strength: d.strength,
-			Dexterity: d.dexterity,
-			Constitution: d.constitution,
-			Intelligence: d.intelligence,
-			Wisdom: d.wisdom,
-			Charisma: d.charisma,
+			Strength: d.Strength,
+			Dexterity: d.Dexterity,
+			Constitution: d.Constitution,
+			Intelligence: d.Intelligence,
+			Wisdom: d.Wisdom,
+			Charisma: d.Charisma,
 		},
 		Speed: speeds,
 		XP: d.XP, 
