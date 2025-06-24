@@ -17,7 +17,8 @@ type MonsterDTO struct {
 	HitDice string
 	HitPointsRoll string
 	Languages string
-	ProficiencyBonus int64
+	ChallengeRating float64 `json:"challenge_rating"`
+	ProficiencyBonus int64 
 	Proficiencies []proficiency.ProficiencyDTO
 	Stats *stats.Stats
 	Speed speed.SpeedDTO
@@ -47,6 +48,7 @@ func (d MonsterDTO) BuildModel() *Monster{
 		HitDice: d.HitDice, 
 		HitPointsRoll: d.HitPointsRoll, 
 		Languages: d.Languages,
+		ChallengeRating: d.ChallengeRating, 
 		ProficiencyBonus: d.ProficiencyBonus, 
 		Proficiencies: proficiencies,
 		Stats: &stats.Stats{

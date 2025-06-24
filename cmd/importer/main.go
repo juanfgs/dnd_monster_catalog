@@ -64,7 +64,6 @@ func main() {
 			}
 		}
 		for _, s := range( speed.BuildModels(mDTO.Speed)) {
-			log.Println(s)
 			err = speedRepo.Create(ctx, &s)
 			if err != nil {
 				log.Fatal(err)

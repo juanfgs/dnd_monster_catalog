@@ -9,6 +9,7 @@ import(
 type Repository interface {
 	Index(ctx context.Context) ([]Monster, error)
 	Create(ctx context.Context, m *Monster) error
+	FindByChallengeRating(ctx context.Context, minChallengeRating float64, maxChallengeRating float64, quantity int64 ) ([]Monster, error)
 }
 
 type repository struct {
@@ -21,9 +22,38 @@ func NewRepository(db *sql.DB) Repository {
 
 // TODO: Implement pagination
 func (r *repository) Index(ctx context.Context) ([]Monster, error) {
-	monsters := make([]Monster, 0)
 	q := `SELECT * FROM monsters AS m LEFT JOIN stats AS s ON(s.monster_id = m.id)`  
-	rows, err := r.db.QueryContext(ctx, q)
+	return r.buildResponse(ctx, q, []any{})
+}
+
+func (r *repository) Create(ctx context.Context, m *Monster) error {
+	q := `INSERT INTO monsters (index, name, size, alignment, hit_points, hit_dice, hit_points_roll, languages, challenge_rating, proficiency_bonus, xp) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING id`  
+	err := r.db.QueryRowContext(ctx, q,
+		m.Index,
+		m.Name,
+		m.Size,
+		m.Alignment,
+		m.HitPoints,
+		m.HitDice,
+		m.HitPointsRoll,
+		m.Languages,
+		m.ChallengeRating,
+		m.ProficiencyBonus,
+		m.XP,
+	).Scan(&m.ID)
+	return err
+}
+
+func (r *repository) FindByChallengeRating(ctx context.Context, minChallengeRating float64, maxChallengeRating float64, quantity int64) ([]Monster, error) {
+	params := []any{minChallengeRating, maxChallengeRating, quantity}
+	q := `SELECT * FROM monsters AS m LEFT JOIN stats AS s ON(s.monster_id = m.id) WHERE challenge_rating >= $1 AND challenge_rating <= $2 ORDER BY RANDOM() LIMIT $3`   
+	return r.buildResponse(ctx, q, params)
+}
+
+
+func (r *repository) buildResponse(ctx context.Context, q string, params []any ) ([]Monster, error) {
+	monsters := make([]Monster, 0)
+	rows, err := r.db.QueryContext(ctx, q, params...)
 	if err != nil {
 		return nil, err
 	}
@@ -42,23 +72,6 @@ func (r *repository) Index(ctx context.Context) ([]Monster, error) {
 	return monsters, nil
 }
 
-func (r *repository) Create(ctx context.Context, m *Monster) error {
-	q := `INSERT INTO monsters (index, name, size, alignment, hit_points, hit_dice, hit_points_roll, languages, proficiency_bonus, xp) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`  
-	err := r.db.QueryRowContext(ctx, q,
-		m.Index,
-		m.Name,
-		m.Size,
-		m.Alignment,
-		m.HitPoints,
-		m.HitDice,
-		m.HitPointsRoll,
-		m.Languages,
-		m.ProficiencyBonus,
-		m.XP,
-	).Scan(&m.ID)
-	return err
-}
-
 func scanColumns(rows *sql.Rows, m *Monster) error{
 	var s stats.Stats 
 	err := rows.Scan(
@@ -71,6 +84,7 @@ func scanColumns(rows *sql.Rows, m *Monster) error{
 		&m.HitDice,
 		&m.HitPointsRoll,
 		&m.Languages,
+		&m.ChallengeRating,
 		&m.ProficiencyBonus,
 		&m.XP,
 		&s.ID,

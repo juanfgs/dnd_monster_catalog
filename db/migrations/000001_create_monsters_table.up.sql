@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS monsters(
        hit_dice VARCHAR(255) NOT NULL,
        hit_points_roll VARCHAR(255) NOT NULL,
        languages VARCHAR(255) NOT NULL,
+       challenge_rating DOUBLE PRECISION,
        proficiency_bonus INTEGER NOT NULL,
        xp INTEGER NOT NULL
 );

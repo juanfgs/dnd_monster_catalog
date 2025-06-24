@@ -18,6 +18,7 @@ type Monster struct {
 	HitDice string
 	HitPointsRoll string
 	Languages string
+	ChallengeRating float64 
 	ProficiencyBonus int64
 	Proficiencies []proficiency.Proficiency
 	Speed []speed.Speed

@@ -15,7 +15,6 @@ import (
 
 func  ListHandler(db *sql.DB) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
-	    
 	    ctx := context.Background()
 	    repo := NewRepository(db)
 	    proficiencyRepo := proficiency.NewRepository(db)
